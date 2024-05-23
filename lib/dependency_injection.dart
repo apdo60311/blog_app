@@ -38,7 +38,9 @@ class DependencyInjection {
         .registerFactory<ConnectionChecker>(() => ConnectionCheckerImpl());
 
     //! Hive
-    serviceLocator.registerLazySingleton(() => Hive.box('blogs'));
+    Hive.init((await getApplicationDocumentsDirectory()).path);
+    final box = await Hive.openBox('blogs');
+    serviceLocator.registerLazySingleton<Box>(() => box);
   }
 
   static void _initAuth() {
